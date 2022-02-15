@@ -13,6 +13,7 @@ export const register = async (req: Request, res: Response) => {
       await accountService.createUser({ email, password })
       res.status(200).json({ status: 1 })
     }
+
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
   }
