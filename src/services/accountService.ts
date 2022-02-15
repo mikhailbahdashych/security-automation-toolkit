@@ -1,7 +1,13 @@
 const knex = require('../knex/knex')
 
 module.exports = {
-    async getUserById(id: string) {
-
-    }
+  async getUserByEmail(email: string) {
+    return knex('users')
+      .first()
+      .where('email', email)
+  },
+  async createUser(data: object) {
+    return knex('users')
+      .insert(data)
+  }
 }
