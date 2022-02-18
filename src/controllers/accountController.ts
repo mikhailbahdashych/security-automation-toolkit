@@ -26,3 +26,11 @@ export const login = async (req: Request, res: Response) => {
     console.log(e)
   }
 };
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    console.log(e)
+  }
+}
