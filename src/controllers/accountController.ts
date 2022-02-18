@@ -21,7 +21,22 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body
+    // @TODO ADD LOGGER
+    let { email, password } = req.body
+
+    password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT)
+    const result = await accountService.getUserToLogin(email, password)
+
+    if (result) {
+      const userId = cryptoService.encrypt(result.id, process.env.CRYPTO_KEY)
+      const token = await jwtService.sign({
+        uxd: userId,
+      });
+      res.status(200).json(token)
+    } else {
+      //
+    }
+
   } catch (e) {
     console.log(e)
   }

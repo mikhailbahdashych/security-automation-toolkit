@@ -5,7 +5,7 @@ const path = require("path");
 const pathToKeys = path.resolve(__dirname, "../../keys");
 
 module.exports = {
-  sign(payload: string) {
+  sign(payload: object) {
     const cert = fs.readFileSync(`${pathToKeys}/private.pem`);
     return jwt.sign(
       payload,
