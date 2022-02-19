@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 const accountService = require('../services/accountService')
 const jwtService = require('../services/jwtService')
 const cryptoService = require('../services/cryptoService')
+const logger = require('pino')()
 
 export const register = async (req: Request, res: Response) => {
   try {
