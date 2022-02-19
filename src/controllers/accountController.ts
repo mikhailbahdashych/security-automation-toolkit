@@ -21,7 +21,6 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    // @TODO ADD LOGGER
     let { email, password } = req.body
 
     password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT)
