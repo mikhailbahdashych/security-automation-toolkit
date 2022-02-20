@@ -1,2 +1,0 @@
-[20-02-2022 09:42:01] [32mINFO[39m: [36mRegistration user with email asd@asd.as[39m
-[20-02-2022 09:45:26] [32mINFO[39m: [36mRegistration user with email asd@asd.as[39m
