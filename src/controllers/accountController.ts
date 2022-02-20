@@ -41,11 +41,11 @@ export const login = async (req: Request, res: Response) => {
       });
       res.status(200).json(token)
     } else {
-      //
+      res.status(500).json({ message: 'Something went wrong' })
     }
 
   } catch (e) {
-    console.log(e)
+    res.status(500).json({ message: 'Something went wrong' })
   }
 };
 
@@ -53,7 +53,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     //
   } catch (e) {
-    console.log(e)
+    res.status(500).json({ message: 'Something went wrong' })
   }
 };
 
@@ -63,7 +63,7 @@ export const verifyToken = async (req: Request, res: Response) => {
     const result = await jwtService.getUser(token)
     res.json(result)
   } catch (e) {
-    console.log(e)
+    res.status(500).json({ message: 'Something went wrong' })
   }
 };
 
@@ -71,6 +71,6 @@ export const sendVerificationCode = async (req: Request, res: Response) => {
   try {
     //
   } catch (e) {
-    console.log(e)
+    res.status(500).json({ message: 'Something went wrong' })
   }
 }
