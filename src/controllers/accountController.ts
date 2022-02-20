@@ -18,7 +18,7 @@ export const register = async (req: Request, res: Response) => {
       res.status(200).json({ status: 1 })
     } else {
       logger.info(`User with email ${email} already exists`)
-      res.status(500).json({ message: 'Something went wrong' })
+      res.status(500).json({ message: "Something went wrong" })
     }
 
   } catch (e) {
