@@ -29,10 +29,11 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    let { email, phone, password } = req.body
+    let { email, password } = req.body
 
     password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT)
     const result = await accountService.getUserToLogin(email, password)
+    logger.info(`Login user with email: ${email}`)
 
     if (result) {
       const userId = cryptoService.encrypt(result.id, process.env.CRYPTO_KEY, process.env.CRYPTO_IV)
@@ -41,6 +42,7 @@ export const login = async (req: Request, res: Response) => {
       });
       res.status(200).json(token)
     } else {
+      logger.info(`Wrong login data for user with email: ${email}`)
       res.status(500).json({ message: 'Something went wrong' })
     }
 
