@@ -2,11 +2,14 @@ import { Request, Response } from 'express';
 const accountService = require('../services/accountService')
 const jwtService = require('../services/jwtService')
 const cryptoService = require('../services/cryptoService')
-const logger = require('pino')({
-  transport: "pino-pretty",
-  options: {
-    translateTime: "SYS:dd-mm-yyyy HH:MM:ss",
-    ignore: "pid,hostname"
+import pino from "pino";
+const logger = pino({
+  transport: {
+    target: "pino-pretty",
+    options: {
+      translateTime: "SYS:dd-mm-yyyy HH:MM:ss",
+      ignore: "pid,hostname",
+    }
   }
 })
 
@@ -14,6 +17,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     let { email, password } = req.body
     const user = await accountService.getUserByEmail(email)
+    logger.info(`Registration user with email ${email}`)
 
     if (!user) {
       password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT)
@@ -22,6 +26,7 @@ export const register = async (req: Request, res: Response) => {
     }
 
   } catch (e) {
+    logger.info(`Error while register => ${e}`)
     res.status(500).json({ message: 'Something went wrong' })
   }
 };
