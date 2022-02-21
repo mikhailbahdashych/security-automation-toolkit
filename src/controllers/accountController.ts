@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import loggerConfig from '../common/logger'
 
-const node2fa = require('node-2fa')
+const twoFactorService = require('node-2fa')
 
 const accountService = require('../services/accountService')
 const jwtService = require('../services/jwtService')
@@ -84,6 +84,7 @@ export const verifyToken = async (req: Request, res: Response) => {
 export const set2fa = async (req: Request, res: Response) => {
   try {
     const { code, token } = req.body
+    const result2F = twoFactorService.verifyToken(token, code);
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
   }
