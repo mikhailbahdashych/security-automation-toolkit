@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import loggerConfig from '../common/logger'
 
+const node2fa = require('node-2fa')
+
 const accountService = require('../services/accountService')
 const jwtService = require('../services/jwtService')
 const cryptoService = require('../services/cryptoService')
