@@ -81,7 +81,7 @@ export const verifyToken = async (req: Request, res: Response) => {
 
 export const set2fa = async (req: Request, res: Response) => {
   try {
-    const { code } = req.body
+    const { code, token } = req.body
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
   }
