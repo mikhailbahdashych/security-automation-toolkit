@@ -15,5 +15,8 @@ module.exports = {
   async createUser(data: object) {
     return knex('users')
       .insert(data)
+  },
+  async set2fa() {
+
   }
 }

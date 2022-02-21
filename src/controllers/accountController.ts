@@ -85,6 +85,9 @@ export const set2fa = async (req: Request, res: Response) => {
   try {
     const { code, token } = req.body
     const result2F = twoFactorService.verifyToken(token, code);
+    if (result2F) {
+      await accountService.set2fa()
+    }
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
   }
