@@ -83,10 +83,15 @@ export const verifyToken = async (req: Request, res: Response) => {
 
 export const set2fa = async (req: Request, res: Response) => {
   try {
-    const { code, token } = req.body
+    const { jwt, code, token } = req.body
+    console.log(req.body)
+    const user = await jwtService.getUser(jwt)
+    const userId = cryptoService.decrypt(user.uxd, process.env.CRYPTO_KEY, process.env.CRYPTO_IV)
+    console.log('userId', userId)
     const result2F = twoFactorService.verifyToken(token, code);
+
     if (result2F) {
-      await accountService.set2fa({token: '', clientId:''})
+      // await accountService.set2fa({token, clientId: id})
     }
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
