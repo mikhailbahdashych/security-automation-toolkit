@@ -17,6 +17,7 @@ export const register = async (req: Request, res: Response) => {
     if (!user) {
       password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT)
       await accountService.createUser({ email, password })
+      logger.info(`User with email ${email} was created`)
       res.status(200).json({ status: 1 })
     } else {
       logger.info(`User with email ${email} already exists`)
