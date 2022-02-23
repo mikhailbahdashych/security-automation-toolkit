@@ -28,8 +28,12 @@ export const sign = (payload: JwtPayload) => {
 
 export const getUser = async (token: string) => {
   try {
+    return jwt.verify(
+      token,
+      publicKey
+    ) as JwtPayload
     // @ts-ignore
-    return await this.getUserPromise(token)
+    // return await this.getUserPromise(token)
   } catch (e) {
     //
   }
