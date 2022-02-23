@@ -8,6 +8,8 @@ const jwtService = require('../services/jwtService')
 const cryptoService = require('../services/cryptoService')
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
+import { CommonResponse } from "../responses/response";
+
 const getUserByJwtToken = async (jwt: string) => {
   const user = await jwtService.getUser(jwt)
   return cryptoService.decrypt(user.uxd, process.env.CRYPTO_KEY, process.env.CRYPTO_IV)
@@ -31,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
 
   } catch (e) {
     logger.info(`Error while register => ${e}`)
-    res.status(500).json({ message: 'Something went wrong' })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 };
 
@@ -55,7 +57,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 };
 
@@ -65,9 +67,7 @@ export const verifyToken = async (req: Request, res: Response) => {
     const result = await jwtService.getUser(token)
     res.status(200).json(result)
   } catch (e) {
-    res.json({
-      error: 'Corrupted token'
-    })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 }
 
@@ -83,7 +83,7 @@ export const set2fa = async (req: Request, res: Response) => {
       logger.info(`2FA was successfully created for user with id: ${userId}`)
     }
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 }
 
@@ -91,7 +91,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   try {
     //
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 };
 
@@ -99,6 +99,6 @@ export const sendVerificationCode = async (req: Request, res: Response) => {
   try {
     //
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' })
+    return CommonResponse.common.somethingWentWrong({ res })
   }
 }
