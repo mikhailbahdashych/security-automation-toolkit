@@ -126,3 +126,19 @@ export const sendVerificationCode = async (req: Request, res: Response) => {
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }
+
+export const changePassword = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
+
+export const closeAccount = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
