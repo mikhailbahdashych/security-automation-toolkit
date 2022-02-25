@@ -142,3 +142,11 @@ export const closeAccount = async (req: Request, res: Response) => {
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }
+
+export const changeEmail = async (req: Request, res: Response) => {
+  try {
+
+  } catch (e) {
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
