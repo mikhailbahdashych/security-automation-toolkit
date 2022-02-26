@@ -70,6 +70,7 @@ export const verifyToken = async (req: Request, res: Response) => {
     const { token } = req.body
     const result = await jwtService.getUser(token)
     if (!result) {
+      logger.info(`Expired token: ${token}`)
       res.status(200).json({error: true})
     } else {
       res.status(200).json(result)
@@ -112,29 +113,14 @@ export const verify2fa = async (req: Request, res: Response) => {
   }
 }
 
-export const resetPassword = async (req: Request, res: Response) => {
-  try {
-    //
-  } catch (e) {
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-};
-
-export const sendVerificationCode = async (req: Request, res: Response) => {
-  try {
-    //
-  } catch (e) {
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-}
-
 export const changePassword = async (req: Request, res: Response) => {
   try {
     const { currentPassword, newPassword, newPasswordRepeat, token } = req.body
     if (newPassword === newPasswordRepeat) {
       const user = await getUserByJwtToken(token)
       if (user.password === cryptoService.hashPassword(currentPassword, process.env.CRYPTO_SALT.toString())) {
-        await accountService.changePassword()
+        await accountService.changePassword(user.id, cryptoService.hashPassword(newPassword, process.env.CRYPTO_SALT.toString()))
+        res.status(200).json({ status: 1 })
       }
     }
   } catch (e) {
@@ -159,8 +145,25 @@ export const closeAccount = async (req: Request, res: Response) => {
 
 export const changeEmail = async (req: Request, res: Response) => {
   try {
-
+    //
   } catch (e) {
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+};
+
+export const sendVerificationCode = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
+

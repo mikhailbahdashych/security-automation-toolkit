@@ -44,6 +44,10 @@ export const closeAccount = async (user: { id: string, email: string }) => {
     .where('id', user.id)
 }
 
-export const changePassword = async () => {
-
+export const changePassword = async (id: string, newPassword: string) => {
+  return knex('users')
+    .update({
+      password: newPassword
+    })
+    .where('id', id)
 }
