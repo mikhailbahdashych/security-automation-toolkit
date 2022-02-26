@@ -10,7 +10,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { CommonResponse } from "../responses/response";
-import {getUserById} from "../services/accountService";
 
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
@@ -143,6 +142,9 @@ export const closeAccount = async (req: Request, res: Response) => {
     const user = await accountService.getUserById(userId)
     if (userId) {
       await accountService.closeAccount(user)
+      res.status(200).json({ status: 1 })
+    } else {
+      res.status(200).json({ status: -1 })
     }
   } catch (e) {
     return CommonResponse.common.somethingWentWrong({ res })

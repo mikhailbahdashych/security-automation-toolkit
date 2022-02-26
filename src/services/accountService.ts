@@ -39,7 +39,7 @@ export const get2fa = async (id: string) => {
 export const closeAccount = async (user: { id: string, email: string }) => {
   return knex('users')
     .update({
-
+      email: `${user.email}_del`
     })
     .where('id', user.id)
 }
