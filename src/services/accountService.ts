@@ -1,6 +1,6 @@
 const knex = require('../knex/knex.js')
 
-export const getUserToLogin  = async (email: string, password: string) => {
+export const getUserToLogin = async (email: string, password: string) => {
   return knex('users')
     .first()
     .where('email', email)
