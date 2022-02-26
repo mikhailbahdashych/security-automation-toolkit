@@ -105,7 +105,7 @@ export const verify2fa = async (req: Request, res: Response) => {
     const { token } = req.body
     const user = await getUserByJwtToken(token)
     const two2fa = await accountService.get2fa(user.id)
-    if (two2fa) {
+    if (two2fa.two2fa) {
       res.status(200).json({ status: 1 })
     } else {
       res.status(200).json({ status: -1 })
