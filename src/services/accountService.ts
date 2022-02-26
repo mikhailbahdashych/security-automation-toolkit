@@ -13,6 +13,12 @@ export const getUserByEmail = async (email: string) => {
     .where('email', email)
 }
 
+export const getUserById = async (id: string) => {
+  return knex('users')
+    .first()
+    .where('id', id)
+}
+
 export const createUser = async (data: object) => {
   return knex('users')
     .insert(data)
@@ -28,4 +34,12 @@ export const get2fa = async (id: string) => {
   return knex('users')
     .first('two2fa')
     .where('id', id)
+}
+
+export const closeAccount = async (user: { id: string, email: string }) => {
+  return knex('users')
+    .update({
+
+    })
+    .where('id', user.id)
 }
