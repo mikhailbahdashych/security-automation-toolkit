@@ -1,25 +1,21 @@
-const nodemailer = require('nodemailer')
+const nodeoutlook = require('nodejs-nodemailer-outlook')
+const dotenv = require('dotenv')
+dotenv.config()
+
 import loggerConfig from '../common/logger'
 const logger = loggerConfig({ label: 'email-controller', path: 'email' })
 
 export const sendEmail = async (message: string) => {
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: '',
-      pass: ''
-    }
-  });
 
-  await transporter.sendMail({
-    from: '"Fred Foo 👻" <>',
+  await nodeoutlook.sendEmail({
+    auth: {
+      user: process.env.EMAIL_NO_REPLY,
+      pass: process.env.EMAIL_NO_REPLY_PASSWORD
+    },
+    from: process.env.EMAIL_NO_REPLY,
     to: "",
-    subject: "Hello ✔",
-    text: "Hello world?",
-    html: "<b>Hello world?</b>",
-  }).then(() => {
-    logger.info(`Email was successfully sent.`)
-  }).catch(() => {
-    logger.info(`Inner error while sending email.`)
+    subject: '',
+    html: ``,
+    text: '!',
   })
 }
