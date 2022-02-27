@@ -5,3 +5,4 @@ node_modules/
 keys
 test.js
 logs/
+package-lock.json
