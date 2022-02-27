@@ -16,7 +16,7 @@ export const sendEmail = async (req: Request, res: Response) => {
 
     if (to) {
 
-      const hash = cryptoService.encrypt(to, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
+      const hash = cryptoService.encryptHex(to, `${process.env.CRYPTO_KEY_SHORT}`, null)
 
       if (type === 'reg') {
         await emailService.sendRegistrationEmail(to, hash)

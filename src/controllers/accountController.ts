@@ -3,7 +3,6 @@ import loggerConfig from '../common/logger'
 
 const twoFactorService = require('node-2fa')
 
-import * as emailService from '../services/emailService';
 import * as accountService from '../services/accountService';
 import * as jwtService from '../services/jwtService';
 import * as cryptoService from '../services/cryptoService';
@@ -45,9 +44,8 @@ export const register = async (req: Request, res: Response) => {
 export const confirmRegistration = async (req: Request, res: Response) => {
   try {
     const { confirmToken } = req.body
-
     if (confirmToken) {
-      const decryptedHash = cryptoService.decrypt(confirmToken, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
+      const decryptedHash = cryptoService.decryptHex(confirmToken, `${process.env.CRYPTO_KEY_SHORT}`, null)
       res.status(200).json({ hash: decryptedHash })
     }
 
