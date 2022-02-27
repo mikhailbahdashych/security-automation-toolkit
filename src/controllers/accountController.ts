@@ -3,7 +3,8 @@ import loggerConfig from '../common/logger'
 
 const twoFactorService = require('node-2fa')
 
-import * as accountService from '../services/accountService'
+import * as emailService from '../services/emailService';
+import * as accountService from '../services/accountService';
 import * as jwtService from '../services/jwtService';
 import * as cryptoService from '../services/cryptoService';
 import * as dotenv from 'dotenv';
@@ -43,6 +44,12 @@ export const register = async (req: Request, res: Response) => {
 
 export const confirmRegistration = async (req: Request, res: Response) => {
   try {
+    const { confirmToken } = req.body
+
+    if (confirmToken) {
+      const decryptedHash = cryptoService.decrypt(confirmToken, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
+      res.status(200).json({ hash: decryptedHash })
+    }
 
   } catch (e) {
     logger.info(`Error while registration conformation => ${e}`)
