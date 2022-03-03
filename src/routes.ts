@@ -3,10 +3,9 @@ const router = require('express').Router();
 const accountController = require('./controllers/accountController')
 const emailController = require('./controllers/emailController')
 
-// import jwt from "./middlewares/jwt";
-
 // @TODO validator(['email', 'phone']) Something with validators
 import validator from "./middlewares/validator";
+import jwt from "./middlewares/jwt";
 
 router.post('/login', accountController.login)
 router.post('/register', accountController.register)

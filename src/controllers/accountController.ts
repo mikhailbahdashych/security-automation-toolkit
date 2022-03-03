@@ -53,7 +53,6 @@ export const confirmRegistration = async (req: Request, res: Response) => {
     const decryptedHash = cryptoService.decryptHex(confirmToken, `${process.env.CRYPTO_KEY_SHORT}`, null)
     const user = await accountService.getClientByEmail(decryptedHash)
 
-    // @TODO ?
     if (!user && user.confirmemail) return res.status(500).json({ status: -1 })
 
     await accountService.confirmEmailRegistration(user.id)
