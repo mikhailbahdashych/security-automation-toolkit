@@ -4,9 +4,11 @@ const accountController = require('./controllers/accountController')
 const emailController = require('./controllers/emailController')
 
 // import jwt from "./middlewares/jwt";
+
+// @TODO validator(['email', 'phone']) Something with validators
 import validator from "./middlewares/validator";
 
-router.post('/login', validator(['email', 'phone']), accountController.login)
+router.post('/login', accountController.login)
 router.post('/register', accountController.register)
 router.post('/confirm-registration', accountController.confirmRegistration)
 
