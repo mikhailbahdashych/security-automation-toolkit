@@ -102,7 +102,7 @@ export const verifyToken = async (req: Request, res: Response) => {
 
     if (!result) {
       logger.info(`Expired token: ${token}`)
-      res.status(200).json({error: true})
+      return res.status(200).json({status: -1})
     }
 
     return res.status(200).json(result)
