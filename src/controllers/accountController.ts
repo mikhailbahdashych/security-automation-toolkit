@@ -10,6 +10,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { CommonResponse } from "../responses/response";
+import {remove2fa} from "../services/accountService";
 
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
@@ -116,10 +117,10 @@ export const set2fa = async (req: Request, res: Response) => {
 
     const user = await getClientByJwtToken(jwt)
 
-    const result2F = twoFactorService.verifyToken(token, code);
+    const result2Fa = twoFactorService.verifyToken(token, code);
     logger.info(`Setting 2FA for user with id: ${user.id}`)
 
-    if (result2F && result2F.delta === 0) {
+    if (result2Fa && result2Fa.delta === 0) {
       await accountService.set2fa({secret: token, clientId: user.id})
       logger.info(`2FA was successfully created for user with id: ${user.id}`)
       res.status(200).json({ status: 1 })
@@ -135,6 +136,24 @@ export const set2fa = async (req: Request, res: Response) => {
 
 export const disable2fa = async (req: Request, res: Response) => {
   try {
+    const { code, token } = req.body
+
+    if (!code || !token) return res.status(200).json({ status: -1 })
+
+    const user = await getClientByJwtToken(token)
+    const twofa = await accountService.get2fa(user.id)
+
+    if (!twofa.twofa) return res.status(200).json({ status: -1 })
+
+    const result2Fa = twoFactorService.verifyToken(token, code)
+
+    if (result2Fa && result2Fa.delta === 0) {
+      await accountService.remove2fa(user.id)
+      logger.info(`2FA was successfully disabled for user with id: ${user.id}`)
+      res.status(200).json({ status: 1 })
+    } else {
+      res.status(500).json({status: -1})
+    }
 
   } catch (e) {
     logger.info(`Error while disabling 2FA => ${e}`)

@@ -36,6 +36,12 @@ export const get2fa = async (id: string) => {
     .where('id', id)
 }
 
+export const remove2fa = async (id: string) => {
+  return knex('users')
+    .update({ twofa: null })
+    .where('id', id)
+}
+
 export const closeAccount = async (client: { id: string, email: string }) => {
   return knex('users')
     .update({
