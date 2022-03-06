@@ -120,13 +120,11 @@ export const set2fa = async (req: Request, res: Response) => {
     const result2Fa = twoFactorService.verifyToken(token, code);
     logger.info(`Setting 2FA for user with id: ${user.id}`)
 
-    if (result2Fa && result2Fa.delta === 0) {
-      await accountService.set2fa({secret: token, clientId: user.id})
-      logger.info(`2FA was successfully created for user with id: ${user.id}`)
-      res.status(200).json({ status: 1 })
-    } else {
-      res.status(500).json({status: -1})
-    }
+    if (!result2Fa && result2Fa.delta !== 0) return res.status(500).json({status: -1})
+
+    await accountService.set2fa({secret: token, clientId: user.id})
+    logger.info(`2FA was successfully created for user with id: ${user.id}`)
+    res.status(200).json({ status: 1 })
 
   } catch (e) {
     logger.info(`Error while setting 2FA => ${e}`)
@@ -147,13 +145,11 @@ export const disable2fa = async (req: Request, res: Response) => {
 
     const result2Fa = twoFactorService.verifyToken(user.twofa, code)
 
-    if (result2Fa && result2Fa.delta === 0) {
-      await accountService.remove2fa(user.id)
-      logger.info(`2FA was successfully disabled for user with id: ${user.id}`)
-      res.status(200).json({ status: -3 })
-    } else {
-      res.status(200).json({ status: -4 })
-    }
+    if (!result2Fa && result2Fa.delta !== 0) return res.status(200).json({ status: -4 })
+
+    await accountService.remove2fa(user.id)
+    logger.info(`2FA was successfully disabled for user with id: ${user.id}`)
+    res.status(200).json({ status: -3 })
 
   } catch (e) {
     logger.info(`Error while disabling 2FA => ${e}`)
