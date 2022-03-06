@@ -10,7 +10,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { CommonResponse } from "../responses/response";
-import {remove2fa} from "../services/accountService";
 
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
