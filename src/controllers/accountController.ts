@@ -133,6 +133,15 @@ export const set2fa = async (req: Request, res: Response) => {
   }
 }
 
+export const disable2fa = async (req: Request, res: Response) => {
+  try {
+
+  } catch (e) {
+    logger.info(`Error while disabling 2FA => ${e}`)
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
+
 export const verify2fa = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
