@@ -136,23 +136,23 @@ export const set2fa = async (req: Request, res: Response) => {
 
 export const disable2fa = async (req: Request, res: Response) => {
   try {
-    const { code, token } = req.body
+    const { code, jwt } = req.body
 
-    if (!code || !token) return res.status(200).json({ status: -1 })
+    if (!code || !jwt) return res.status(200).json({ status: -1 })
 
-    const user = await getClientByJwtToken(token)
+    const user = await getClientByJwtToken(jwt)
     const twofa = await accountService.get2fa(user.id)
 
     if (!twofa.twofa) return res.status(200).json({ status: -1 })
 
-    const result2Fa = twoFactorService.verifyToken(token, code)
+    const result2Fa = twoFactorService.verifyToken(user.twofa, code)
 
     if (result2Fa && result2Fa.delta === 0) {
       await accountService.remove2fa(user.id)
       logger.info(`2FA was successfully disabled for user with id: ${user.id}`)
-      res.status(200).json({ status: 1 })
+      res.status(200).json({ status: -3 })
     } else {
-      res.status(500).json({status: -1})
+      res.status(200).json({ status: -4 })
     }
 
   } catch (e) {
