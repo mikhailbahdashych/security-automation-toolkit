@@ -17,7 +17,7 @@ export const sign = (payload: JwtPayload) => {
       },
       {
         algorithm: "RS256",
-        expiresIn: "30m"
+        expiresIn: "6h"
       }
     )
   } catch (e) {
