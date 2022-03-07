@@ -119,7 +119,7 @@ export const set2fa = async (req: Request, res: Response) => {
     const result2Fa = twoFactorService.verifyToken(token, code);
     logger.info(`Setting 2FA for user with id: ${user.id}`)
 
-    if (!result2Fa && result2Fa.delta !== 0) return res.status(500).json({status: -1})
+    if (!result2Fa || result2Fa.delta !== 0) return res.status(500).json({status: -1})
 
     await accountService.set2fa({secret: token, clientId: user.id})
     logger.info(`2FA was successfully created for user with id: ${user.id}`)
