@@ -19,6 +19,7 @@ const getClientByJwtToken = async (jwt: string) => {
   return await accountService.getClientById(userId)
 }
 
+// @TODO Do something with statues (500 instead of 200)
 export const register = async (req: Request, res: Response) => {
   try {
     let { email, password } = req.body
