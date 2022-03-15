@@ -28,6 +28,7 @@ router.post('/send-email', emailController.sendEmail)
 
 // Token
 router.post('/verify-token', accountController.verifyToken)
+router.post('/client-by-token', accountController.clientByToken)
 
 // Other
 router.post('/verification-code', accountController.sendVerificationCode)

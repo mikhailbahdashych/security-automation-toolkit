@@ -122,6 +122,15 @@ export const verifyToken = async (req: Request, res: Response) => {
   }
 }
 
+export const clientByToken = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    logger.info(`Error while getting client by token => ${e}`)
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
+
 export const set2fa = async (req: Request, res: Response) => {
   try {
     const { jwt, code, token } = req.body
