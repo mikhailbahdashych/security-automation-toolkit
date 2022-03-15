@@ -22,6 +22,7 @@ const getClientByJwtToken = async (jwt: string) => {
 }
 
 // @TODO Do something with statues (500 instead of 200)
+// @TODO Should I somehow replace this function - verifyToken - with - clientByToken
 export const register = async (req: Request, res: Response) => {
   try {
     let { email, password } = req.body
@@ -124,7 +125,15 @@ export const verifyToken = async (req: Request, res: Response) => {
 
 export const clientByToken = async (req: Request, res: Response) => {
   try {
-    //
+    const { token } = req.body
+
+    if (!token) return res.status(200).json({ status: -1 })
+
+    const result = await getClientByJwtToken(token)
+
+    if (!result) return res.status(200).json({ status: -1 })
+
+    return res.status(200).json(result)
   } catch (e) {
     logger.info(`Error while getting client by token => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
