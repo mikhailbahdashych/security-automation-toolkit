@@ -281,3 +281,11 @@ export const sendVerificationCode = async (req: Request, res: Response) => {
   }
 }
 
+export const generateReferralLink = async (req: Request, res: Response) => {
+  try {
+    //
+  } catch (e) {
+    logger.info(`Error while generating referral link => ${e}`)
+    return CommonResponse.common.somethingWentWrong({ res })
+  }
+}
