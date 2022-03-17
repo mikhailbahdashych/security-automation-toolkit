@@ -17,7 +17,6 @@ import { CommonResponse } from "../responses/response";
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
 // @TODO Do something with statues (500 instead of 200)
-// @TODO Create some function to get users by token more completely
 export const register = async (req: Request, res: Response) => {
   try {
     let { email, password } = req.body
