@@ -26,13 +26,13 @@ router.post('/change-password', auth, accountController.changePassword)
 
 // Email
 router.post('/change-email', auth, accountController.changeEmail)
-router.post('/send-email', emailController.sendEmail)
+router.post('/send-email', emailController.sendEmail) // ?
 
 // Token
-router.post('/client-by-token', accountController.clientByToken)
+router.post('/client-by-token', accountController.clientByToken) // ?
 
 // Other
-router.post('/verification-code', accountController.sendVerificationCode)
+router.post('/verification-code', accountController.sendVerificationCode) // ?
 
 // Referral links
 router.post('/generate-referral-link', auth, reflinkController.generateReferralLink)
