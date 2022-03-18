@@ -12,7 +12,6 @@ const logger = loggerConfig({ label: 'reflink-controller', path: 'reflink' })
 export const generateReferralLink = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-    if (!token) return res.status(200).json({ status: -1 })
     const user = await getClientByJwtToken(token)
     if (!user) return res.status(200).json({ status: -1 })
 
@@ -30,7 +29,6 @@ export const generateReferralLink = async (req: Request, res: Response) => {
 export const getReferralLink = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-    if (!token) return res.status(200).json({ status: -1 })
     const user = await getClientByJwtToken(token)
     if (!user) return res.status(200).json({ status: -1 })
 
@@ -46,7 +44,8 @@ export const getReferralLink = async (req: Request, res: Response) => {
 export const getClientsByReferralLink = async (req: Request, res: Response) => {
   try {
     const { reflink } = req.params
-    
+    if (!reflink) return res.status(200).json({ status: -1 })
+
     return res.status(200).json({ reflink })
   } catch (e) {
     logger.error(`Error while getting clients by referral link => ${e}`)

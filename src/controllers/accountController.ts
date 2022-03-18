@@ -103,7 +103,6 @@ export const login = async (req: Request, res: Response) => {
 export const clientByToken = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-    if (!token) return res.status(200).json({ status: -1 })
     const result = await getClientByJwtToken(token)
     if (!result) return res.status(200).json({ status: -1 })
 
@@ -141,9 +140,11 @@ export const disable2fa = async (req: Request, res: Response) => {
   try {
     const { code, jwt } = req.body
 
-    if (!code || !jwt) return res.status(200).json({ status: -1 })
-
     const user = await getClientByJwtToken(jwt)
+    if (!user) return res.status(200).json({ status: -1 })
+
+    if (!code) return res.status(200).json({ status: -1 })
+
     const twofa = await accountService.get2fa(user.id)
 
     if (!twofa.twofa) return res.status(200).json({ status: -1 })
@@ -166,10 +167,9 @@ export const disable2fa = async (req: Request, res: Response) => {
 export const verify2fa = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-
-    if (!token) return res.status(200).json({ status: -1 })
-
     const user = await getClientByJwtToken(token)
+    if (!user) return res.status(200).json({ status: -1 })
+
     const twofa = await accountService.get2fa(user.id)
 
     if (!twofa.twofa) return res.status(200).json({ status: -2 })
@@ -229,7 +229,6 @@ export const changeEmail = async (req: Request, res: Response) => {
 export const closeAccount = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-    if (!token) return res.status(200).json({ status: -1 })
     const user = await getClientByJwtToken(token)
     if (!user) return res.status(200).json({ status: -1 })
 
