@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable('users', table => {
+  return knex.schema.createTable('clients', table => {
     table.uuid('id').notNullable().defaultTo(knex.raw('gen_random_uuid ()')).primary()
     table.text('personaluuid')
     table.text('email').notNullable()
@@ -17,5 +17,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('users')
+  return knex.schema.dropTable('clients')
 };

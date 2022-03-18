@@ -6,6 +6,7 @@ import * as reflinkService from '../services/reflinkService'
 
 import { CommonResponse } from "../responses/response";
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
+import {getClientsByReflink} from "../services/reflinkService";
 
 const logger = loggerConfig({ label: 'reflink-controller', path: 'reflink' })
 
@@ -45,6 +46,8 @@ export const getClientsByReferralLink = async (req: Request, res: Response) => {
   try {
     const { reflink } = req.params
     if (!reflink) return res.status(400).json({ status: -1 })
+
+    await reflinkService.getClientsByReflink()
 
     return res.status(200).json({ reflink })
   } catch (e) {

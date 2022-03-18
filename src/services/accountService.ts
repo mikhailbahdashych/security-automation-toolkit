@@ -1,5 +1,5 @@
 const knex = require('../knex/knex.js')
-const tableName = 'users'
+const tableName = 'clients'
 
 export const getClientToLogin = async (email: string, password: string) => {
   return knex(tableName)

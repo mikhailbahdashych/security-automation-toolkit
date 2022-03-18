@@ -5,7 +5,7 @@ const tableName = 'reflinks'
 export const createReflink = async (userId: string, reflink: string) => {
   const generatedUuid = uuid.v4()
 
-  const reflinkid = await knex('users')
+  const reflinkid = await knex('clients')
     .update({ reflinkid: generatedUuid })
     .where('id', userId).returning('reflinkid')
 
@@ -14,7 +14,11 @@ export const createReflink = async (userId: string, reflink: string) => {
 
 export const getReflink = async (userId: string) => {
   return knex(tableName)
-    .leftJoin('users', 'users.reflinkid', `${tableName}.id`)
-    .where('users.id', userId)
-    .first(`${tableName}.reflink`,'users.reflinkid')
+    .leftJoin('clients', 'clients.reflinkid', `${tableName}.id`)
+    .where('clients.id', userId)
+    .first(`${tableName}.reflink`,'clients.reflinkid')
+}
+
+export const getClientsByReflink = async () => {
+
 }

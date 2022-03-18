@@ -5,18 +5,18 @@ exports.up = function(knex) {
     table
       .foreign('id')
       .references('reflinkid')
-      .inTable('users')
+      .inTable('clients')
 
 
     table.text('reflink').notNullable()
     table.float('amount').nullable().defaultTo(0)
-    table.json('invitedusers').nullable()
+    table.json('invitedclients').nullable()
     table.uuid('invitedby').nullable()
 
     table
       .foreign('invitedby')
       .references('id')
-      .inTable('users')
+      .inTable('clients')
 
     table.timestamp("createdat").defaultTo(knex.fn.now())
     table.timestamp("updatedat").defaultTo(knex.fn.now())
