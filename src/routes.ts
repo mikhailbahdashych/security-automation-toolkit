@@ -1,4 +1,4 @@
-import {generateReferralLink} from "./controllers/reflinkController";
+import {generateReferralLink, getClientsByReferralLink} from "./controllers/reflinkController";
 
 const router = require('express').Router();
 
@@ -38,5 +38,6 @@ router.post('/verification-code', accountController.sendVerificationCode)
 // Referral links
 router.post('/generate-referral-link', reflinkController.generateReferralLink)
 router.post('/get-referral-link', reflinkController.getReferralLink)
+router.get('/get-clients-by-referral-link/:reflink', reflinkController.getClientsByReferralLink)
 
 export default router;
