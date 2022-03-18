@@ -48,7 +48,7 @@ export const getClientsByReferralLink = async (req: Request, res: Response) => {
     const { reflink } = req.params
     if (!reflink) return res.status(400).json({ status: -1 })
 
-    await reflinkService.getClientsByReflink()
+    const clientsByReflink = await reflinkService.getClientsByReflink()
 
     return res.status(200).json({ reflink })
   } catch (e) {
