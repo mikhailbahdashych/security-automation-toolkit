@@ -48,7 +48,7 @@ export const findReferralLink = async (req: Request, res: Response) => {
     const foundedReflink = await reflinkService.findReflink(reflink)
     if (!foundedReflink) return res.status(400).json({ status: -1 })
 
-    return res.status(200).json(foundedReflink)
+    return res.status(200).json(foundedReflink.reflink)
   } catch (e) {
     logger.error(`Error while finding referral link => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
