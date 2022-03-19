@@ -6,7 +6,6 @@ import * as reflinkService from '../services/reflinkService'
 
 import { CommonResponse } from "../responses/response";
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
-import {getClientsByReflink} from "../services/reflinkService";
 
 const logger = loggerConfig({ label: 'reflink-controller', path: 'reflink' })
 
@@ -39,20 +38,6 @@ export const getReferralLink = async (req: Request, res: Response) => {
     return res.status(200).json(result.reflink)
   } catch (e) {
     logger.error(`Error while getting referral link => ${e}`)
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-}
-
-export const getClientsByReferralLink = async (req: Request, res: Response) => {
-  try {
-    const { reflink } = req.params
-    if (!reflink) return res.status(400).json({ status: -1 })
-
-    const clientsByReflink = await reflinkService.getClientsByReflink()
-
-    return res.status(200).json({ reflink })
-  } catch (e) {
-    logger.error(`Error while getting clients by referral link => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }

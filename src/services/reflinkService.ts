@@ -19,6 +19,9 @@ export const getReflink = async (userId: string) => {
     .first(`${tableName}.reflink`)
 }
 
-export const getClientsByReflink = async () => {
-
+export const getClientsByReflink = async (userId: string) => {
+  return knex(tableName)
+    .first('invitedclients')
+    .leftJoin('clients', 'clients.reflinkid', `${tableName}.id`)
+    .where('clients.id', userId)
 }

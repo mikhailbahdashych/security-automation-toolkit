@@ -11,6 +11,7 @@ export const getClientToLogin = async (email: string, password: string) => {
 export const getClientByEmail = async (email: string) => {
   return knex(tableName)
     .first(
+      'id',
       'personaluuid',
       'email',
       'confirmemail',
@@ -22,6 +23,7 @@ export const getClientByEmail = async (email: string) => {
 export const getClientById = async (id: string) => {
   return knex(tableName)
     .first(
+      'id',
       'personaluuid',
       'email',
       'confirmemail',
