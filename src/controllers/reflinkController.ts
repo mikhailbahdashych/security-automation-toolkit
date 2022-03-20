@@ -8,6 +8,7 @@ import * as accountService from '../services/accountService'
 import { CommonResponse } from "../responses/response";
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
 import { hideEmail } from "../common/hideEmail";
+import moment from "moment";
 
 const logger = loggerConfig({ label: 'reflink-controller', path: 'reflink' })
 
@@ -37,14 +38,19 @@ export const getReferralLink = async (req: Request, res: Response) => {
     const result = await reflinkService.getReflinkByInviteeId(user.id)
     if (!result) return res.status(400).json({ status: -1 })
 
-    let accs: any[] = []
+    const accs: any[] = []
     await Promise.all(
       Object.entries(result.invitedclients).map(async item => {
         const { email } = await accountService.getClientById(item[0])
-        accs.push(email)
+        accs.push({
+          email, invitedAt: item[1]
+        })
       })
     )
-    accs = accs.map(x => hideEmail(x))
+    accs.forEach(item => {
+      item.email = hideEmail(item.email)
+      item.invitedAt = moment().format('YYYY-MM-DD')
+    })
     result.invitedclients = accs
 
     return res.status(200).json(result)
