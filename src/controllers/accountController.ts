@@ -15,7 +15,6 @@ import { hideEmail } from "../common/hideEmail";
 dotenv.config();
 
 import { CommonResponse } from "../responses/response";
-import {findReflinkByName} from "../services/reflinkService";
 
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
