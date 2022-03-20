@@ -1,37 +1,34 @@
 const knex = require('../knex/knex.js')
 const uuid = require('uuid')
+const moment = require('moment')
 const tableName = 'reflinks'
 
-export const createReflink = async (userId: string, reflink: string) => {
+export const createReflink = async (clientId: string, reflink: string) => {
   const generatedUuid = uuid.v4()
 
   const reflinkid = await knex('clients')
     .update({ reflinkid: generatedUuid })
-    .where('id', userId).returning('reflinkid')
+    .where('id', clientId).returning('reflinkid')
 
   return knex(tableName).insert({ id: reflinkid[0].reflinkid, reflink })
 }
 
-export const getReflinkByInvitorId = async (userId: string) => {
+export const getReflinkByInviteeId = async (clientId: string) => {
   return knex(tableName)
     .leftJoin('clients', 'clients.reflinkid', `${tableName}.id`)
-    .where('clients.id', userId)
+    .where('clients.id', clientId)
     .first(`${tableName}.reflink`, `${tableName}.invitedclients`)
 }
 
 export const findReflinkByName = async (reflink: string) => {
   return knex(tableName)
-    .first('reflink')
+    .first('reflink', 'invitedclients')
     .where('reflink', reflink)
 }
 
-export const getRelinkCreationData = async (reflink: string) => {
+export const addClientToReferralProgram = async (clientId: string, reflink: string) => {
   return knex(tableName)
-    .leftJoin('clients', 'clients.reflinkid', `${tableName}.id`)
-    .where(`${tableName}.reflink`, reflink)
-    .first('clients.id', `${tableName}.invitedclients`)
-}
-
-export const addClientToReferralProgram = async () => {
-
+    .update({
+      invitedclients: JSON.stringify({[clientId]: moment()})
+    }).where('reflink', reflink)
 }

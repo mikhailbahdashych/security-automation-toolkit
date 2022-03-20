@@ -15,6 +15,7 @@ import { hideEmail } from "../common/hideEmail";
 dotenv.config();
 
 import { CommonResponse } from "../responses/response";
+import {findReflinkByName} from "../services/reflinkService";
 
 const logger = loggerConfig({ label: 'account-controller', path: 'account' })
 
@@ -37,12 +38,10 @@ export const register = async (req: Request, res: Response) => {
     const createdClient = await accountService.createClient({ email, password, personaluuid })
     logger.info(`Client with email ${email} was created`)
 
-    console.log('createdClient', createdClient[0])
     if (reflink) {
-      const invitationData = await reflinkService.getRelinkCreationData(reflink)
-      // if createdClient.id not in invitationData.invitedclients
-      console.log('invitationData', invitationData)
-
+      const invitationData = await reflinkService.findReflinkByName(reflink)
+      // if createdClient[0].id not in invitationData.invitedclients
+      await reflinkService.addClientToReferralProgram(createdClient[0].id, reflink)
     }
 
     return res.status(200).json({ status: 1 })

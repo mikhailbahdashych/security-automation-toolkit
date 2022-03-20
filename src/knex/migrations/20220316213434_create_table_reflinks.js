@@ -7,7 +7,6 @@ exports.up = function(knex) {
       .references('reflinkid')
       .inTable('clients')
 
-
     table.text('reflink').notNullable()
     table.float('amount').nullable().defaultTo(0)
     table.json('invitedclients').nullable()
