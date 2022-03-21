@@ -272,12 +272,3 @@ export const resetPassword = async (req: Request, res: Response) => {
     return CommonResponse.common.somethingWentWrong({ res })
   }
 };
-
-export const sendVerificationCode = async (req: Request, res: Response) => {
-  try {
-    //
-  } catch (e) {
-    logger.error(`Error while sending verification code => ${e}`)
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-}
