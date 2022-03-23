@@ -79,7 +79,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    let { email, password, phone } = req.body
+    let { email, password } = req.body
 
     if (!email || !password) res.status(400).json({ status: -1 })
 
@@ -97,12 +97,19 @@ export const login = async (req: Request, res: Response) => {
       return res.status(403).json({ status: -1 })
     }
 
+    if (client.twofa) {
+      return res.status(200).json({ twofa: true })
+    }
+
+    if (client.phone) {
+      return res.status(200).json({ phone: true })
+    }
+
     const clientId = cryptoService.encrypt(client.id, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
     const token = jwtService.sign({
       uxd: clientId,
     });
     return res.status(200).json(token)
-
   } catch (e) {
     logger.error(`Error while login => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
