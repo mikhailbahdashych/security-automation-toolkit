@@ -82,3 +82,7 @@ export const confirmEmailRegistration = async (id: string) => {
     })
     .where('id', id)
 }
+
+export const freezeAccount = async (id: string) => {
+
+}

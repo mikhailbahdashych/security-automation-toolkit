@@ -295,7 +295,12 @@ export const closeAccount = async (req: Request, res: Response) => {
 
 export const freezeAccount = async (req: Request, res: Response) => {
   try {
-    //
+    const { token } = req.body
+    const client = await getClientByJwtToken(token)
+    if (!client) return CommonResponse.common.accessForbidden({ res })
+
+    await accountService.freezeAccount(client.id)
+    return CommonResponse.common.success({ res })
   } catch (e) {
     logger.error(`Error while freezing account => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
