@@ -1,6 +1,15 @@
 import { ResponsePayload } from '../../interfaces/objects/ResponsePayload';
 
 export class CommonResponses {
+  public success(data: ResponsePayload) {
+    const { res } = data;
+
+    return res.status(200).json({
+      status: 1,
+      message: 'success'
+    })
+  }
+
   public badRequest(data: ResponsePayload) {
     const { res } = data;
 

@@ -44,7 +44,7 @@ export const register = async (req: Request, res: Response) => {
       await reflinkService.addClientToReferralProgram(createdClient[0].id, reflink)
     }
 
-    return res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error while register => ${e}`)
@@ -70,7 +70,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
     ) return CommonResponse.common.accessForbidden({ res })
 
     await accountService.confirmEmailRegistration(client.id)
-    return res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error while registration confirmation => ${e}`)
@@ -133,7 +133,7 @@ export const set2fa = async (req: Request, res: Response) => {
 
     await accountService.set2fa({ secret: token, clientId: client.id })
     logger.info(`2FA was successfully created for client with id: ${ client.id }`)
-    res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error while setting 2FA => ${e}`)
@@ -180,7 +180,7 @@ export const verify2fa = async (req: Request, res: Response) => {
 
     if (!twofa) return res.status(200).json({ status: -2 })
 
-    res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error verifying setting 2FA => ${e}`)
@@ -249,7 +249,7 @@ export const changePassword = async (req: Request, res: Response) => {
     if (client.password !== cryptoService.hashPassword(currentPassword, process.env.CRYPTO_SALT.toString())) return res.status(403).json({ status: -1 })
 
     await accountService.changePassword(client.id, cryptoService.hashPassword(newPassword, process.env.CRYPTO_SALT.toString()))
-    res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error while changing password => ${e}`)
@@ -274,7 +274,7 @@ export const changeEmail = async (req: Request, res: Response) => {
     if (checkIfEmailUsed || client.email !== currentEmail) return CommonResponse.common.badRequest({ res })
 
     await accountService.changeEmail(client.id, newEmail)
-    res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
 
   } catch (e) {
     logger.error(`Error while changing email => ${e}`)
@@ -289,7 +289,7 @@ export const closeAccount = async (req: Request, res: Response) => {
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
     await accountService.closeAccount(client)
-    res.status(200).json({ status: 1 })
+    return CommonResponse.common.success({ res })
   } catch (e) {
     logger.error(`Error while closing account => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
