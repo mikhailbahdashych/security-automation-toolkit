@@ -192,6 +192,8 @@ export const loginWith2fa = async (req: Request, res: Response) => {
   try {
     const { email, twoFaCode } = req.body
 
+    if (!twoFaCode) return res.status(403).json({ status: -1 })
+
     const client = await accountService.getClientByEmail(email)
 
     if (!client) return res.status(403).json({ status: -1 })
