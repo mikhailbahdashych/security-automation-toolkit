@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const accountController = require('./controllers/accountController')
+const clientController = require('./controllers/clientController')
 const emailController = require('./controllers/emailController')
 const reflinkController = require('./controllers/reflinkController')
 
@@ -8,27 +8,27 @@ const reflinkController = require('./controllers/reflinkController')
 import validator from "./middlewares/validator";
 
 // Basic functions
-router.post('/login', accountController.login)
-router.post('/register', accountController.register)
-router.post('/confirm-registration', accountController.confirmRegistration)
-router.post('/close-account', accountController.closeAccount)
-router.post('/freeze-account', accountController.freezeAccount)
+router.post('/login', clientController.login)
+router.post('/register', clientController.register)
+router.post('/confirm-registration', clientController.confirmRegistration)
+router.post('/close-account', clientController.closeAccount)
+router.post('/freeze-account', clientController.freezeAccount)
 
 // 2FA
-router.post('/set-2fa', accountController.set2fa)
-router.post('/disable-2fa', accountController.disable2fa)
-router.post('/verify-2fa', accountController.verify2fa)
-router.post('/login-with-2fa', accountController.loginWith2fa)
+router.post('/set-2fa', clientController.set2fa)
+router.post('/disable-2fa', clientController.disable2fa)
+router.post('/verify-2fa', clientController.verify2fa)
+router.post('/login-with-2fa', clientController.loginWith2fa)
 
 // Password
-router.post('/change-password', accountController.changePassword)
+router.post('/change-password', clientController.changePassword)
 
 // Email
-router.post('/change-email', accountController.changeEmail)
+router.post('/change-email', clientController.changeEmail)
 router.post('/send-email', emailController.sendEmail)
 
 // Token
-router.post('/client-by-token', accountController.clientByToken)
+router.post('/client-by-token', clientController.clientByToken)
 
 // Referral links
 router.post('/generate-referral-link', reflinkController.generateReferralLink)

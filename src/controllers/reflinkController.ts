@@ -3,7 +3,7 @@ import loggerConfig from '../common/logger'
 
 import * as crypto from "crypto";
 import * as reflinkService from '../services/reflinkService'
-import * as accountService from '../services/accountService'
+import * as clientService from '../services/clientService'
 
 import { CommonResponse } from "../responses/response";
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
@@ -42,7 +42,7 @@ export const getReferralLink = async (req: Request, res: Response) => {
     const accs: any[] = []
     await Promise.all(
       Object.entries(result.invitedclients).map(async item => {
-        const { email } = await accountService.getClientById(item[0])
+        const { email } = await clientService.getClientById(item[0])
         accs.push({
           email, invitedAt: item[1]
         })

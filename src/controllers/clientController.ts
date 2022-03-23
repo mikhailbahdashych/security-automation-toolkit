@@ -4,7 +4,7 @@ import loggerConfig from '../common/logger'
 
 const twoFactorService = require('node-2fa')
 
-import * as accountService from '../services/accountService';
+import * as clientService from '../services/clientService';
 import * as jwtService from '../services/jwtService';
 import * as cryptoService from '../services/cryptoService';
 import * as reflinkService from '../services/reflinkService';
@@ -24,7 +24,7 @@ export const register = async (req: Request, res: Response) => {
 
     if (!email || !password) return CommonResponse.common.badRequest({ res })
 
-    const client = await accountService.getClientByEmail(email)
+    const client = await clientService.getClientByEmail(email)
     logger.info(`Registration client with email: ${email}`)
 
     if (client) {
@@ -34,7 +34,7 @@ export const register = async (req: Request, res: Response) => {
 
     password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT.toString())
     const personaluuid = (seedrandom(email).quick() * 1e10).toFixed(0)
-    const createdClient = await accountService.createClient({ email, password, personaluuid })
+    const createdClient = await clientService.createClient({ email, password, personaluuid })
     logger.info(`Client with email ${email} was created`)
 
     if (reflink) {
@@ -59,7 +59,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
     if (!confirmToken) return CommonResponse.common.badRequest({ res })
 
     const decryptedHash = cryptoService.decryptHex(confirmToken, `${process.env.CRYPTO_KEY_SHORT}`, null)
-    const client = await accountService.getClientByEmail(decryptedHash)
+    const client = await clientService.getClientByEmail(decryptedHash)
 
     if (!client && client.confirmemail) return CommonResponse.common.accessForbidden({ res })
 
@@ -68,7 +68,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
       moment(client.createdat).format('YYYY-MM-DD HH:mm:ss')
     ) return CommonResponse.common.accessForbidden({ res }, -2)
 
-    await accountService.confirmEmailRegistration(client.id)
+    await clientService.confirmEmailRegistration(client.id)
     return CommonResponse.common.success({ res })
 
   } catch (e) {
@@ -84,7 +84,7 @@ export const login = async (req: Request, res: Response) => {
     if (!email || !password) return CommonResponse.common.badRequest({ res })
 
     password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT.toString())
-    const client = await accountService.getClientToLogin(email, password)
+    const client = await clientService.getClientToLogin(email, password)
     logger.info(`Login client with email: ${email}`)
 
     if (!client) {
@@ -130,7 +130,7 @@ export const set2fa = async (req: Request, res: Response) => {
 
     if (!result2Fa || result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res })
 
-    await accountService.set2fa(token, client.id)
+    await clientService.set2fa(token, client.id)
     logger.info(`2FA was successfully created for client with id: ${ client.id }`)
     return CommonResponse.common.success({ res })
 
@@ -149,7 +149,7 @@ export const disable2fa = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(jwt)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const { twofa } = await accountService.getClientById(client.id)
+    const { twofa } = await clientService.getClientById(client.id)
 
     if (!twofa) return CommonResponse.common.accessForbidden({ res })
 
@@ -158,7 +158,7 @@ export const disable2fa = async (req: Request, res: Response) => {
     if (!result2Fa) return CommonResponse.common.accessForbidden({ res }, -4)
     if (result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res }, -4)
 
-    await accountService.remove2fa(client.id)
+    await clientService.remove2fa(client.id)
     logger.info(`2FA was successfully disabled for client with id: ${client.id}`)
     res.status(200).json({ status: -3 })
 
@@ -174,7 +174,7 @@ export const verify2fa = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const { twofa } = await accountService.getClientById(client.id)
+    const { twofa } = await clientService.getClientById(client.id)
 
     if (!twofa) return res.status(200).json({ status: -2 })
 
@@ -192,11 +192,11 @@ export const loginWith2fa = async (req: Request, res: Response) => {
 
     if (!twoFaCode) return CommonResponse.common.accessForbidden({ res })
 
-    const client = await accountService.getClientByEmail(email)
+    const client = await clientService.getClientByEmail(email)
 
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const { twofa } = await accountService.getClientById(client.id)
+    const { twofa } = await clientService.getClientById(client.id)
 
     if (!twofa) return CommonResponse.common.accessForbidden({ res })
 
@@ -245,7 +245,7 @@ export const changePassword = async (req: Request, res: Response) => {
 
     if (client.password !== cryptoService.hashPassword(currentPassword, process.env.CRYPTO_SALT.toString())) return res.status(403).json({ status: -1 })
 
-    await accountService.changePassword(client.id, cryptoService.hashPassword(newPassword, process.env.CRYPTO_SALT.toString()))
+    await clientService.changePassword(client.id, cryptoService.hashPassword(newPassword, process.env.CRYPTO_SALT.toString()))
     return CommonResponse.common.success({ res })
 
   } catch (e) {
@@ -266,11 +266,11 @@ export const changeEmail = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const checkIfEmailUsed = await accountService.getClientByEmail(newEmail)
+    const checkIfEmailUsed = await clientService.getClientByEmail(newEmail)
 
     if (checkIfEmailUsed || client.email !== currentEmail) return CommonResponse.common.badRequest({ res })
 
-    await accountService.changeEmail(client.id, newEmail)
+    await clientService.changeEmail(client.id, newEmail)
     return CommonResponse.common.success({ res })
 
   } catch (e) {
@@ -285,7 +285,7 @@ export const closeAccount = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    await accountService.closeAccount(client.id, client.email)
+    await clientService.closeAccount(client.id, client.email)
     return CommonResponse.common.success({ res })
   } catch (e) {
     logger.error(`Error while closing account => ${e}`)
@@ -299,7 +299,7 @@ export const freezeAccount = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    await accountService.freezeAccount(client.id)
+    await clientService.freezeAccount(client.id)
     return CommonResponse.common.success({ res })
   } catch (e) {
     logger.error(`Error while freezing account => ${e}`)
