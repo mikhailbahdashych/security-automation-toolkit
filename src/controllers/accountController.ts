@@ -84,20 +84,21 @@ export const login = async (req: Request, res: Response) => {
     if (!email || !password) res.status(400).json({ status: -1 })
 
     password = cryptoService.hashPassword(password, process.env.CRYPTO_SALT.toString())
-    const result = await accountService.getClientToLogin(email, password)
+    const client = await accountService.getClientToLogin(email, password)
+    console.log(client)
     logger.info(`Login client with email: ${email}`)
 
-    if (!result) {
+    if (!client) {
       logger.info(`Wrong login data for client with email: ${email}`)
       return res.status(403).json({ status: -1 })
     }
 
-    if (!result.confirmemail) {
+    if (!client.confirmemail) {
       logger.info(`Email wasn't confirmed for client: ${email}`)
       return res.status(403).json({ status: -1 })
     }
 
-    const clientId = cryptoService.encrypt(result.id, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
+    const clientId = cryptoService.encrypt(client.id, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
     const token = jwtService.sign({
       uxd: clientId,
     });
@@ -112,11 +113,11 @@ export const login = async (req: Request, res: Response) => {
 export const clientByToken = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
-    const result = await getClientByJwtToken(token)
-    if (!result) return res.status(403).json({ status: -1 })
-    result.email = hideEmail(result.email)
+    const client = await getClientByJwtToken(token)
+    if (!client) return res.status(403).json({ status: -1 })
+    client.email = hideEmail(client.email)
 
-    return res.status(200).json(result)
+    return res.status(200).json(client)
   } catch (e) {
     logger.error(`Error while getting client by token => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
