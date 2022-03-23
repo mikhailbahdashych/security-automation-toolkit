@@ -51,12 +51,12 @@ export const remove2fa = async (id: string) => {
     .where('id', id)
 }
 
-export const closeAccount = async (client: { id: string, email: string }) => {
+export const closeAccount = async (id: string, email: string) => {
   return knex(tableName)
     .update({
-      email: `${client.email}_del`
+      email: `${email}_del`
     })
-    .where('id', client.id)
+    .where('id', id)
 }
 
 export const changePassword = async (id: string, newPassword: string) => {

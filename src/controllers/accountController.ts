@@ -285,7 +285,7 @@ export const closeAccount = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    await accountService.closeAccount(client)
+    await accountService.closeAccount(client.id, client.email)
     return CommonResponse.common.success({ res })
   } catch (e) {
     logger.error(`Error while closing account => ${e}`)
