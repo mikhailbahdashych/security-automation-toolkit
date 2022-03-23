@@ -21,7 +21,6 @@ router.post('/verify-2fa', accountController.verify2fa)
 router.post('/login-with-2fa', accountController.loginWith2fa)
 
 // Password
-router.post('/reset-password', accountController.resetPassword)
 router.post('/change-password', accountController.changePassword)
 
 // Email

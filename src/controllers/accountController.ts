@@ -301,12 +301,3 @@ export const freezeAccount = async (req: Request, res: Response) => {
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }
-
-export const resetPassword = async (req: Request, res: Response) => {
-  try {
-    //
-  } catch (e) {
-    logger.error(`Error while reset password => ${e}`)
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-};
