@@ -10,7 +10,7 @@ export class CommonResponses {
     })
   }
 
-  public badRequest(data: ResponsePayload, s: number = 1) {
+  public badRequest(data: ResponsePayload, s: number = -1) {
     const { res } = data;
 
     return res.status(400).json({
@@ -19,7 +19,7 @@ export class CommonResponses {
     })
   }
 
-  public unauthorized(data: ResponsePayload, s: number = 1) {
+  public unauthorized(data: ResponsePayload, s: number = -1) {
     const { res } = data;
 
     return res.status(401).json({
@@ -28,7 +28,7 @@ export class CommonResponses {
     });
   }
 
-  public somethingWentWrong(data: ResponsePayload, s: number = 1) {
+  public somethingWentWrong(data: ResponsePayload, s: number = -1) {
     const { res } = data;
 
     return res.status(500).json({
@@ -37,7 +37,7 @@ export class CommonResponses {
     });
   }
 
-  public accessForbidden(data: ResponsePayload, s: number = 1) {
+  public accessForbidden(data: ResponsePayload, s: number = -1) {
     const { res } = data;
 
     return res.status(403).json({
