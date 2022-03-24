@@ -15,6 +15,11 @@ export const checkWallets = async (req: Request, res: Response) => {
 
     const clientWallets = await walletService.getWalletsByClientId(client.id)
 
+    if (clientWallets.length < 2) {
+      //
+    }
+
+    return res.status(200).json(clientWallets)
   } catch (e) {
     logger.error(`Error while checking wallets => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
