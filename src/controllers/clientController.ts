@@ -14,6 +14,8 @@ import { getClientByJwtToken } from "../common/getClientByJwtToken";
 import { hideEmail } from "../common/hideEmail";
 dotenv.config();
 
+// @TODO Probably I should do something to make 2FA check while login, otherwise I will have to create x2 endpoints
+
 import { CommonResponse } from "../responses/response";
 
 const logger = loggerConfig({ label: 'client-controller', path: 'client' })
