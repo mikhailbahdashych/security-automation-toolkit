@@ -8,11 +8,9 @@ import * as clientService from '../services/clientService';
 import * as jwtService from '../services/jwtService';
 import * as cryptoService from '../services/cryptoService';
 import * as reflinkService from '../services/reflinkService';
-import * as dotenv from 'dotenv';
 import seedrandom from 'seedrandom';
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
 import { hideEmail } from "../common/hideEmail";
-dotenv.config();
 
 // @TODO Probably I should do something to make 2FA check while login, otherwise I will have to create x2 endpoints
 
