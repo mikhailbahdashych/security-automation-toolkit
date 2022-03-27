@@ -8,6 +8,7 @@ export const getClientToLogin = async (email: string, password: string) => {
     .andWhere('password', password)
 }
 
+// @TODO Remove and replace those 2
 export const getClientByEmail = async (email: string) => {
   return knex(tableName)
     .first(
