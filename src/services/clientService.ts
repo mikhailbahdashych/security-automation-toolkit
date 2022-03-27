@@ -99,6 +99,6 @@ export const confirmEmailRegistration = async (id: string) => {
     .where('id', id)
 }
 
-export const freezeAccount = async (id: string) => {
-
+export const freezeAccount = async (data: object) => {
+  return knex('freezedaccounts').insert(data)
 }
