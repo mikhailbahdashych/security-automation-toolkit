@@ -88,6 +88,7 @@ export const login = async (req: Request, res: Response) => {
     const client = await clientService.getClientToLogin(email, password)
     logger.info(`Login client with email: ${email}`)
 
+    // @TODO Check for freeze
     if (!client) {
       logger.info(`Wrong login data for client with email: ${email}`)
       return CommonResponse.common.accessForbidden({ res })
