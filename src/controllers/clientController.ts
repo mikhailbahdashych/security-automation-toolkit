@@ -14,7 +14,7 @@ import { hideEmail } from "../common/hideEmail";
 
 // @TODO Probably I should do something to make 2FA check while login,
 //  otherwise I will have to create x2 endpoints
-//  (IDEA) Just do it using v-2fa endpoint (btw, change its name)
+//  (IDEA) Just do it using v-2fa endpoint
 import { CommonResponse } from "../responses/response";
 
 const logger = loggerConfig({ label: 'client-controller', path: 'client' })
@@ -169,7 +169,7 @@ export const disable2fa = async (req: Request, res: Response) => {
   }
 }
 
-export const verify2fa = async (req: Request, res: Response) => {
+export const checkFor2fa = async (req: Request, res: Response) => {
   try {
     const { token } = req.body
     const client = await getClientByJwtToken(token)
