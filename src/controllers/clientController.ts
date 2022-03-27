@@ -80,7 +80,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    let { email, password } = req.body
+    let { email, password, twofa } = req.body
 
     if (!email || !password) return CommonResponse.common.badRequest({ res })
 
@@ -99,7 +99,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     if (client.twofa) {
-      return res.status(200).json({ twofa: true })
+      if (!twofa) return res.status(200).json({ twofa: true })
+
+      const result2Fa = twoFactorService.verifyToken(client.twofa, twofa)
+
+      if (!result2Fa) return CommonResponse.common.accessForbidden({ res }, -4)
+      if (result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res }, -4)
     }
 
     if (client.phone) {
@@ -183,37 +188,6 @@ export const checkFor2fa = async (req: Request, res: Response) => {
 
   } catch (e) {
     logger.error(`Error verifying setting 2FA => ${e}`)
-    return CommonResponse.common.somethingWentWrong({ res })
-  }
-}
-
-export const loginWith2fa = async (req: Request, res: Response) => {
-  try {
-    const { email, twoFaCode } = req.body
-
-    if (!twoFaCode) return CommonResponse.common.accessForbidden({ res })
-
-    const client = await clientService.getClientByEmail(email)
-
-    if (!client) return CommonResponse.common.accessForbidden({ res })
-
-    const { twofa } = await clientService.getClientById(client.id)
-
-    if (!twofa) return CommonResponse.common.accessForbidden({ res })
-
-    const result2Fa = twoFactorService.verifyToken(twofa, twoFaCode)
-
-    if (!result2Fa) return CommonResponse.common.accessForbidden({ res }, -4)
-    if (result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res }, -4)
-
-    const clientId = cryptoService.encrypt(client.id, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
-    const token = jwtService.sign({
-      uxd: clientId,
-    });
-
-    res.status(200).json({ status: 1, token })
-  } catch (e) {
-    logger.error(`Error while checking 2FA => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
   }
 }
