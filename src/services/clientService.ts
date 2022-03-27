@@ -34,6 +34,22 @@ export const getClientById = async (id: string) => {
     ).where('id', id)
 }
 
+export const getClientByEmailOrId = async (data: {email: string, id: string}) => {
+  return knex(tableName)
+    .first(
+      'id',
+      'personaluuid',
+      'email',
+      'confirmemail',
+      'emailchange',
+      'twofa',
+      'phone'
+    ).modify((x: any) => {
+      if (data.email) x.where('email', data.email)
+      else x.where('id', data.id)
+    })
+}
+
 export const createClient = async (data: object) => {
   return knex(tableName)
     .insert(data).returning('*')
