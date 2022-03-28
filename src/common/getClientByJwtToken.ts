@@ -8,5 +8,5 @@ export const getClientByJwtToken = async (jwt: string) => {
   const userJwt = await jwtService.getClient(jwt)
   if (!userJwt) return false
   const clientId = cryptoService.decrypt(userJwt.uxd, process.env.CRYPTO_KEY.toString(), process.env.CRYPTO_IV.toString())
-  return await clientService.getClientByEmailOrId({ email:null, id:clientId })
+  return await clientService.getClientByEmailOrId({ id: clientId })
 }

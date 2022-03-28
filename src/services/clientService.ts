@@ -1,6 +1,11 @@
 const knex = require('../knex/knex.js')
 const tableName = 'clients'
 
+type Data = {
+  email?: any,
+  id?: any
+}
+
 export const getClientToLogin = async (email: string, password: string) => {
   return knex(tableName)
     .first()
@@ -8,7 +13,7 @@ export const getClientToLogin = async (email: string, password: string) => {
     .andWhere('password', password)
 }
 
-export const getClientByEmailOrId = async (data: { email: string, id: string }) => {
+export const getClientByEmailOrId = async (data: Data) => {
   return knex(tableName)
     .first(
       'id',

@@ -25,7 +25,7 @@ export const register = async (req: Request, res: Response) => {
 
     if (!email || !password) return CommonResponse.common.badRequest({ res })
 
-    const client = await clientService.getClientByEmailOrId({ email, id: null })
+    const client = await clientService.getClientByEmailOrId({ email })
     logger.info(`Registration client with email: ${email}`)
 
     if (client) {
@@ -60,7 +60,7 @@ export const confirmRegistration = async (req: Request, res: Response) => {
     if (!confirmToken) return CommonResponse.common.badRequest({ res })
 
     const decryptedHash = cryptoService.decryptHex(confirmToken, `${process.env.CRYPTO_KEY_SHORT}`, null)
-    const client = await clientService.getClientByEmailOrId({ email: null, id: decryptedHash })
+    const client = await clientService.getClientByEmailOrId({ id: decryptedHash })
 
     if (!client && client.confirmemail) return CommonResponse.common.accessForbidden({ res })
 
@@ -156,7 +156,7 @@ export const disable2fa = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(jwt)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const { twofa } = await clientService.getClientByEmailOrId({ email: null, id: client.id })
+    const { twofa } = await clientService.getClientByEmailOrId({ id: client.id })
 
     if (!twofa) return CommonResponse.common.accessForbidden({ res })
 
@@ -181,7 +181,7 @@ export const checkFor2fa = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const { twofa } = await clientService.getClientByEmailOrId({ email: null, id: client.id })
+    const { twofa } = await clientService.getClientByEmailOrId({ id: client.id })
 
     if (!twofa) return res.status(200).json({ status: -2 })
 
@@ -242,7 +242,7 @@ export const changeEmail = async (req: Request, res: Response) => {
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
-    const checkIfEmailUsed = await clientService.getClientByEmailOrId({ email: newEmail, id: null })
+    const checkIfEmailUsed = await clientService.getClientByEmailOrId({ email: newEmail})
 
     if (checkIfEmailUsed || client.email !== currentEmail) return CommonResponse.common.badRequest({ res })
 
