@@ -80,7 +80,7 @@ export const getFrozenAccount = async (id: string) => {
 }
 
 export const freezeAccount = async (id: string) => {
-  return knex('freezedaccounts').insert(id)
+  return knex('freezedaccounts').insert({ clientid: id })
 }
 
 export const unfreezeAccount = async (id: string) => {
