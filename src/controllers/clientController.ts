@@ -88,7 +88,6 @@ export const login = async (req: Request, res: Response) => {
     const client = await clientService.getClientToLogin(email, password)
     logger.info(`Login client with email: ${email}`)
 
-    // @TODO Check for freeze
     if (!client) {
       logger.info(`Wrong login data for client with email: ${email}`)
       return CommonResponse.common.accessForbidden({ res })
@@ -97,6 +96,14 @@ export const login = async (req: Request, res: Response) => {
     if (!client.confirmemail) {
       logger.info(`Email wasn't confirmed for client: ${email}`)
       return CommonResponse.common.accessForbidden({ res })
+    }
+
+    const checkIfAccountFrozen = await clientService.getFrozenAccount(client.id)
+    logger.info(`Check if account was frozen for client with email: ${email}`)
+
+    if (checkIfAccountFrozen) {
+      await clientService.unfreezeAccount(client.id)
+      logger.info(`Account was frozen, let's unfreeze it for client with email: ${email}`)
     }
 
     if (client.twofa) {

@@ -74,10 +74,17 @@ export const confirmEmailRegistration = async (id: string) => {
     .where('id', id)
 }
 
+export const getFrozenAccount = async (id: string) => {
+  return knex('freezedaccounts')
+    .first().where('clientid', id)
+}
+
+// fix here
 export const freezeAccount = async (data: object) => {
   return knex('freezedaccounts').insert(data)
 }
 
-export const unfreezeAccount = async () => {
-
+export const unfreezeAccount = async (id: string) => {
+  return knex('freezedaccounts')
+    .del().where('clientid', id)
 }
