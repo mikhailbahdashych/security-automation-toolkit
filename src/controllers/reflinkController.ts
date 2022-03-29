@@ -7,7 +7,7 @@ import * as clientService from '../services/clientService'
 
 import { CommonResponse } from "../responses/response";
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
-import { hideEmail } from "../common/hideEmail";
+import { hideEmail } from "../common/hiders";
 import moment from "moment";
 import * as QRCode from "qrcode";
 

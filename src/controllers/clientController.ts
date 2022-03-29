@@ -10,7 +10,7 @@ import * as cryptoService from '../services/cryptoService';
 import * as reflinkService from '../services/reflinkService';
 import seedrandom from 'seedrandom';
 import { getClientByJwtToken } from "../common/getClientByJwtToken";
-import { hideEmail } from "../common/hideEmail";
+import { hideEmail } from "../common/hiders";
 
 import { CommonResponse } from "../responses/response";
 
@@ -205,6 +205,7 @@ export const clientByToken = async (req: Request, res: Response) => {
 
     client.email = hideEmail(client.email)
     client.twofa = !!client.twofa;
+    console.log(client)
 
     return res.status(200).json(client)
   } catch (e) {
