@@ -87,3 +87,4 @@ export const unfreezeAccount = async (id: string) => {
   return knex('freezedaccounts')
     .del().where('clientid', id)
 }
+
