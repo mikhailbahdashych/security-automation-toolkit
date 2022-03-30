@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { verify2fa } from "../interfaces/interfaces"
 import { getClientByJwtToken } from "./getClientByJwtToken";
 import { CommonResponse } from "../responses/response";
-import twoFactorService from "node-2fa";
+const twoFactorService = require('node-2fa');
 
 export const verifyTwoFa = async (data: verify2fa, res: Response) => {
   const client = await getClientByJwtToken(data.token)
