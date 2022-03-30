@@ -88,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
 
     if (!client) {
       logger.info(`Wrong login data for client with email: ${email}`)
-      return CommonResponse.common.accessForbidden({ res })
+      return CommonResponse.common.unauthorized({ res })
     }
 
     if (!client.confirmemail) {
