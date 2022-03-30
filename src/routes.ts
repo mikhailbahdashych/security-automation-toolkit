@@ -8,7 +8,7 @@ const walletController = require('./controllers/walletController')
 import validator from "./middlewares/validator";
 
 // Basic functions
-router.post('/login', validator(['email', 'password']), clientController.login)
+router.post('/login', validator(['email', 'password', 'phone', 'twofa']), clientController.login)
 router.post('/register', validator(['email', 'password']), clientController.register)
 router.post('/confirm-registration', clientController.confirmRegistration)
 router.post('/freeze-or-close-account', clientController.freezeOrCloseAccount)
