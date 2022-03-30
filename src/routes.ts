@@ -11,8 +11,7 @@ import validator from "./middlewares/validator";
 router.post('/login', clientController.login)
 router.post('/register', clientController.register)
 router.post('/confirm-registration', clientController.confirmRegistration)
-router.post('/close-account', clientController.closeAccount)
-router.post('/freeze-account', clientController.freezeAccount)
+router.post('/freeze-or-close-account', clientController.freezeOrCloseAccount)
 
 // 2FA
 router.post('/set-2fa', clientController.set2fa)

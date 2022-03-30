@@ -273,9 +273,10 @@ export const changeEmail = async (req: Request, res: Response) => {
   }
 }
 
-export const closeAccount = async (req: Request, res: Response) => {
+export const freezeOrCloseAccount = async (req: Request, res: Response) => {
   try {
-    const { token, twofa } = req.body
+    const { token, twofa, type } = req.body
+
     const client = await getClientByJwtToken(token)
     if (!client) return CommonResponse.common.accessForbidden({ res })
 
@@ -284,29 +285,13 @@ export const closeAccount = async (req: Request, res: Response) => {
     if (!result2Fa) return CommonResponse.common.accessForbidden({ res })
     if (result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res })
 
-    await clientService.closeAccount(client.id, client.email)
+    if (type === 'closeaccount') await clientService.closeAccount(client.id, client.email)
+    else await clientService.freezeAccount(client.id)
     return CommonResponse.common.success({ res })
+
   } catch (e) {
-    logger.error(`Error while closing account => ${e}`)
+    logger.error(`Error while ${req.body.type} account => ${e}`)
     return CommonResponse.common.somethingWentWrong({ res })
-  }
-}
 
-export const freezeAccount = async (req: Request, res: Response) => {
-  try {
-    const { token, twofa } = req.body
-    const client = await getClientByJwtToken(token)
-    if (!client) return CommonResponse.common.accessForbidden({ res })
-
-    const result2Fa = twoFactorService.verifyToken(client.twofa, twofa)
-
-    if (!result2Fa) return CommonResponse.common.accessForbidden({ res })
-    if (result2Fa.delta !== 0) return CommonResponse.common.accessForbidden({ res })
-
-    await clientService.freezeAccount(client.id)
-    return CommonResponse.common.success({ res })
-  } catch (e) {
-    logger.error(`Error while freezing account => ${e}`)
-    return CommonResponse.common.somethingWentWrong({ res })
   }
 }
