@@ -34,6 +34,6 @@ router.get('/get-referral-link', reflinkController.getReferralLink)
 router.get('/registration-from-reflink/:reflink', reflinkController.findReferralLink)
 
 // Wallet
-router.post('/check-wallets', walletController.checkWallets)
+router.get('/check-wallets', walletController.checkWallets)
 
 export default router;
