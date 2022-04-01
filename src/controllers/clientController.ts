@@ -159,7 +159,7 @@ export const disable2fa = async (req: Request, res: Response) => {
     if (!twofa) return CommonResponse.common.badRequest({ res })
 
     const client = await verifyTwoFa({ token, twofa })
-    if (!client) return CommonResponse.common.unauthorized({ res })
+    if (!client) return CommonResponse.common.unauthorized({ res }, -4)
 
     await clientService.remove2fa(client.id)
     logger.info(`2FA was successfully disabled for client with id: ${client.id}`)
