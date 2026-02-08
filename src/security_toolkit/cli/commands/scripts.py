@@ -290,7 +290,7 @@ def delete(
         typer.Option("--force", "-f", help="Skip confirmation"),
     ] = False,
 ) -> None:
-    """Delete a registered script."""
+    """Delete a registered script permanently."""
     manager = ScriptManager()
     script = manager.get(name=name)
 
@@ -299,13 +299,16 @@ def delete(
         raise typer.Exit(1)
 
     if not force:
-        confirm = typer.confirm(f"Are you sure you want to delete '{name}'?")
+        console.print(f"[yellow]Warning:[/yellow] This action is irreversible!")
+        console.print(f"  Script: {name}")
+        console.print(f"  Path: {script.path}")
+        confirm = typer.confirm("Are you sure you want to permanently delete this script?")
         if not confirm:
             console.print("[yellow]Cancelled[/yellow]")
             raise typer.Exit(0)
 
     if manager.delete(name):
-        console.print(f"[green]Script deleted:[/green] {name}")
+        console.print(f"[green]Script permanently deleted:[/green] {name}")
     else:
         console.print(f"[red]Error:[/red] Failed to delete script")
         raise typer.Exit(1)

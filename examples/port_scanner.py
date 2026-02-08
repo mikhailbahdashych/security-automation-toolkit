@@ -8,11 +8,11 @@ For authorized security testing only.
 Usage:
     seckit scripts register port-scan --path examples/port_scanner.py \
         --description "Simple TCP port scanner" --category "network" \
-        --params '[{"name": "host", "type": "string", "required": true, "description": "Target host"},
+        --params '[{"name": "target", "type": "string", "required": true, "description": "Target host"},
                    {"name": "ports", "type": "string", "default": "22,80,443,8080", "description": "Comma-separated ports"},
                    {"name": "timeout", "type": "int", "default": 1, "description": "Connection timeout in seconds"}]'
 
-    seckit scripts run port-scan --param host=192.168.1.1 --param ports=22,80,443
+    seckit scripts run port-scan --param target=192.168.1.1 --param ports=22,80,443
 """
 
 import argparse
@@ -84,7 +84,7 @@ def get_service_name(port: int) -> str:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="Simple TCP port scanner")
-    parser.add_argument("--host", required=True, help="Target host")
+    parser.add_argument("--target", required=True, help="Target host")
     parser.add_argument(
         "--ports",
         default="22,80,443,8080",
@@ -108,14 +108,14 @@ def main():
 
     print(f"Port Scan Report")
     print(f"================")
-    print(f"Target: {args.host}")
+    print(f"Target: {args.target}")
     print(f"Ports: {len(ports)}")
     print(f"Timeout: {args.timeout}s")
     print(f"Started: {datetime.now().isoformat()}")
     print("-" * 50)
 
     results = {
-        "host": args.host,
+        "host": args.target,
         "timestamp": datetime.now().isoformat(),
         "ports": [],
         "summary": {"open": 0, "closed": 0, "filtered": 0},
@@ -124,7 +124,7 @@ def main():
     # Scan ports in parallel
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {
-            executor.submit(scan_port, args.host, port, args.timeout): port
+            executor.submit(scan_port, args.target, port, args.timeout): port
             for port in ports
         }
 

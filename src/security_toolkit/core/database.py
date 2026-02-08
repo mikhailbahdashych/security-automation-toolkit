@@ -139,14 +139,20 @@ class Database:
             script.id = cursor.lastrowid
             return script
 
-    def get_script(self, script_id: int | None = None, name: str | None = None) -> Script | None:
+    def get_script(
+        self,
+        script_id: int | None = None,
+        name: str | None = None,
+        active_only: bool = True,
+    ) -> Script | None:
         """Get a script by ID or name."""
         with self.connection() as conn:
             cursor = conn.cursor()
+            active_clause = " AND is_active = 1" if active_only else ""
             if script_id is not None:
-                cursor.execute("SELECT * FROM scripts WHERE id = ?", (script_id,))
+                cursor.execute(f"SELECT * FROM scripts WHERE id = ?{active_clause}", (script_id,))
             elif name is not None:
-                cursor.execute("SELECT * FROM scripts WHERE name = ?", (name,))
+                cursor.execute(f"SELECT * FROM scripts WHERE name = ?{active_clause}", (name,))
             else:
                 return None
 
@@ -203,10 +209,10 @@ class Database:
             return script
 
     def delete_script(self, script_id: int) -> bool:
-        """Delete a script (soft delete by setting is_active=0)."""
+        """Permanently delete a script from the database."""
         with self.connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("UPDATE scripts SET is_active = 0 WHERE id = ?", (script_id,))
+            cursor.execute("DELETE FROM scripts WHERE id = ?", (script_id,))
             conn.commit()
             return cursor.rowcount > 0
 
