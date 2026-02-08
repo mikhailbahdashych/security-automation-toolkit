@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<NessusClientData_v2>
+<Report name="Sample Security Scan">
+<ReportHost name="192.168.1.10">
+<HostProperties>
+<tag name="host-ip">192.168.1.10</tag>
+<tag name="operating-system">Linux 5.4</tag>
+</HostProperties>
+<ReportItem port="22" severity="2" pluginID="10267" pluginName="SSH Server CBC Mode Ciphers Enabled">
+<description>The SSH server is configured to use Cipher Block Chaining (CBC) mode ciphers, which are considered weak.</description>
+<solution>Configure the SSH server to use only CTR or GCM mode ciphers.</solution>
+<cve>CVE-2008-5161</cve>
+<cvss3_base_score>5.3</cvss3_base_score>
+</ReportItem>
+<ReportItem port="443" severity="3" pluginID="45411" pluginName="SSL Certificate Signed Using Weak Hashing Algorithm">
+<description>The SSL certificate has been signed using a cryptographically weak hashing algorithm (SHA-1).</description>
+<solution>Generate a new SSL certificate using SHA-256 or stronger.</solution>
+<cve>CVE-2004-2761</cve>
+<cvss3_base_score>7.5</cvss3_base_score>
+</ReportItem>
+<ReportItem port="80" severity="4" pluginID="34460" pluginName="Critical Web Application Vulnerability">
+<description>A critical vulnerability was found in the web application allowing remote code execution.</description>
+<solution>Apply the vendor security patch immediately.</solution>
+<cve>CVE-2024-1234</cve>
+<cvss3_base_score>9.8</cvss3_base_score>
+</ReportItem>
+</ReportHost>
+<ReportHost name="192.168.1.20">
+<HostProperties>
+<tag name="host-ip">192.168.1.20</tag>
+</HostProperties>
+<ReportItem port="3389" severity="2" pluginID="57690" pluginName="RDP Encryption Level is Medium or Low">
+<description>The RDP service is configured with weak encryption.</description>
+<solution>Configure RDP to use High encryption level.</solution>
+<cvss3_base_score>4.3</cvss3_base_score>
+</ReportItem>
+</ReportHost>
+</Report>
+</NessusClientData_v2>
