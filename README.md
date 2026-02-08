@@ -2,6 +2,8 @@
 
 A professional command-line tool for SecOps automation, providing IAM analysis, vulnerability management, compliance evidence collection, and security log analysis. Features both CLI and interactive TUI modes.
 
+![seckit CLI Overview](static/cli-overview.png)
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -65,7 +67,6 @@ uv sync
 # Verify installation
 uv run seckit --help
 ```
-
 
 ## Configuration
 
@@ -132,6 +133,8 @@ Launch the interactive terminal interface:
 seckit tui
 ```
 
+![TUI Dashboard](static/tui-dashboard.png)
+
 **Keyboard shortcuts:**
 - `d` - Dashboard
 - `t` - Tools
@@ -139,6 +142,8 @@ seckit tui
 - `r` - Results
 - `q` - Quit
 - `?` - Help
+
+![TUI Tools Screen](static/tui-tools.png)
 
 ## Tools
 
@@ -170,6 +175,8 @@ seckit access-review run \
 ### Vulnerability Scanner
 
 Parse and normalize vulnerability scan outputs from popular scanners.
+
+![Vulnerability Scan Output](static/vuln-scan-output.png)
 
 ```bash
 # Parse Nessus scan
@@ -217,6 +224,8 @@ seckit compliance status --framework pci-dss
 
 Analyze security logs for events, patterns, and anomalies.
 
+![Log Analyzer Output](static/log-analyzer-output.png)
+
 ```bash
 # Analyze auth.log
 seckit log-analyzer analyze --input /var/log/auth.log
@@ -247,6 +256,8 @@ seckit log-analyzer top-users --input auth.log
 ## Custom Scripts
 
 Register and execute custom Python or Shell scripts with parameter validation and execution tracking.
+
+![Scripts List](static/scripts-list.png)
 
 ### Register a Script
 
@@ -283,6 +294,8 @@ seckit scripts history
 seckit scripts delete my-scanner
 ```
 
+![Script Details](static/script-show.png)
+
 ### Execute a Script
 
 ```bash
@@ -295,6 +308,8 @@ seckit scripts run my-scanner \
 seckit scripts run my-scanner --param target=example.com --timeout 300
 ```
 
+![Script Execution](static/script-execution.png)
+
 ## Output Formats
 
 All tools support multiple output formats:
@@ -305,6 +320,8 @@ All tools support multiple output formats:
 | CSV | `.csv` | Spreadsheet-compatible, findings only |
 | HTML | `.html` | Professional reports with styling |
 | Markdown | `.md` | Documentation-friendly format |
+
+![HTML Report Example](static/html-report.png)
 
 ```bash
 # Specify output format
